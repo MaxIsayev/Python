@@ -19,8 +19,9 @@ def open_albums(main_window: sg.Window):
                 sg.Input(key="-NUMBEROFSONGSINSERT-", size=20, default_text="Number of songs to insert"),
                 sg.Input(key="-ALBUMRATINGINSERT-", size=20, default_text="Album rating to insert"),  
             ],
-            [
-                sg.Input(key="-MUSICIANIDINSERT-", size=20, default_text="Musician id insert"),                
+            [                  
+                sg.Text('Choose musician id:'),               
+                sg.Combo(get_musician_id(connector, cursor), font=('Arial Bold', 12), enable_events=True,  readonly=False, key='-COMBOINSERT-')   
             ],                     
             sg.Button("Insert row", key="-INSERT-")            
         ],               
@@ -32,8 +33,9 @@ def open_albums(main_window: sg.Window):
                 sg.Input(key="-NUMBEROFSONGSUPDATE-", size=20, default_text="new number of songs"),                
             ],
             [
-                sg.Input(key="-ALBUMRATINGUPDATE-", size=20, default_text="new album rating"),  
-                sg.Input(key="-MUSICIANIDUPDATE-", size=20, default_text="new musician id"),                
+                sg.Input(key="-ALBUMRATINGUPDATE-", size=20, default_text="new album rating"), 
+                sg.Text('New musician id:'),               
+                sg.Combo(get_musician_id(connector, cursor), font=('Arial Bold', 12), enable_events=True,  readonly=False, key='-COMBOUPDATE-')                
             ],
             sg.Button("Update row", key="-UPDATE-")
         ],               
@@ -42,12 +44,12 @@ def open_albums(main_window: sg.Window):
             sg.Button("Delete row", key="-DELETE-")
         ], 
         [            
-            sg.Button("Return", key="-RETURN-")
+            sg.Button("Return", key="-RETURN-"),            
         ]     
     ]
 
     window = sg.Window("Albums | Music store database PTU20", layout, element_padding=10, resizable=True)
-
+    
     while True:
         event, values = window.read()
         if event in [sg.WINDOW_CLOSED, "-RETURN-"]:
@@ -55,14 +57,15 @@ def open_albums(main_window: sg.Window):
         if event == "-INSERT-":
             insert_album(connector, cursor, 
                          values["-NAMEINSERT-"], values["-YEARRELEASEDINSERT-"], values["-NUMBEROFSONGSINSERT-"],
-                         values["-ALBUMRATINGINSERT-"], values["-MUSICIANIDINSERT-"])             
+                         values["-ALBUMRATINGINSERT-"], values["-COMBOINSERT-"])             
         if event == "-DELETE-":
             delete_album(connector, cursor, values["-IDDELETE-"])
         if event == "-UPDATE-":
             update_album(connector, cursor, 
                          values["-NAMEUPDATE-"], values["-YEARRELEASEDUPDATE-"], values["-NUMBEROFSONGSUPDATE-"], 
-                         values["-ALBUMRATINGUPDATE-"], values["-MUSICIANIDUPDATE-"],values["-IDUPDATE-"])   
-        window["-TABLE-"].update(values=get_albums(connector, cursor))     
+                         values["-ALBUMRATINGUPDATE-"], values["-COMBOUPDATE-"],values["-IDUPDATE-"])   
+        window["-TABLE-"].update(values=get_albums(connector, cursor))           
+      
     window.close()
     main_window.un_hide()
     connector.close()

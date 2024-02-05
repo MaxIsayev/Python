@@ -80,3 +80,17 @@ def update_track(connector: sqlite3.Connection,
                               WHERE id = ?''', (name, length, bitrate, year_released, genre, track_rating, album_id, id))  
         except Exception as error:
             sg.PopupOK(f"DB Error {error.__class__.__name__}: {error}", title="DB Error")        
+
+def get_albums_id(connection: sqlite3.Connection, cursor: sqlite3.Cursor)-> list[Any]:
+    query = "SELECT id FROM albums"
+    with connection:
+        try:
+            cursor.execute(query)
+            albums = cursor.fetchall()
+        except Exception as error:
+            sg.PopupOK(f"DB Error {error.__class__.__name__}: {error}", title="DB Error")
+            return []
+    result = []
+    for album in albums:
+        result.append(album[0])
+    return result

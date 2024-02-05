@@ -22,7 +22,8 @@ def open_tracks(main_window: sg.Window):
             [
                 sg.Input(key="-GENREINSERT-", size=20, default_text="Genre to insert"),
                 sg.Input(key="-TRACKRATINGINSERT-", size=20, default_text="Track rating to insert"),  
-                sg.Input(key="-ALBUMIDINSERT-", size=20, default_text="Album id insert"),  
+                sg.Text('Choose album id:'),               
+                sg.Combo(get_albums_id(connector, cursor), font=('Arial Bold', 12), enable_events=True,  readonly=False, key='-COMBOINSERT-')   
             ],                     
             sg.Button("Insert row", key="-INSERT-")            
         ],               
@@ -37,7 +38,8 @@ def open_tracks(main_window: sg.Window):
                 sg.Input(key="-YEARRELEASEDUPDATE-", size=20, default_text="new year released"),
                 sg.Input(key="-GENREUPDATE-", size=20, default_text="new genre"),
                 sg.Input(key="-TRACKRATINGUPDATE-", size=20, default_text="new track rating"),   
-                sg.Input(key="-ALBUMIDUPDATE-", size=20, default_text="new album id") 
+                sg.Text('New album id:'),               
+                sg.Combo(get_albums_id(connector, cursor), font=('Arial Bold', 12), enable_events=True,  readonly=False, key='-COMBOUPDATE-')   
             ],
             sg.Button("Update row", key="-UPDATE-")
         ],               
@@ -59,13 +61,13 @@ def open_tracks(main_window: sg.Window):
         if event == "-INSERT-":
             insert_track(connector, cursor, 
                          values["-NAMEINSERT-"], values["-LENGTHINSERT-"], values["-BITRATEINSERT-"], values["-YEARRELEASEDINSERT-"],
-                         values["-GENREINSERT-"], values["-TRACKRATINGINSERT-"], values["-ALBUMIDINSERT-"])             
+                         values["-GENREINSERT-"], values["-TRACKRATINGINSERT-"], values["-COMBOINSERT-"])             
         if event == "-DELETE-":
             delete_track(connector, cursor, values["-IDDELETE-"])
         if event == "-UPDATE-":
             update_track(connector, cursor, 
                          values["-NAMEUPDATE-"], values["-LENGTHUPDATE-"], values["-BITRATEUPDATE-"], values["-YEARRELEASEDUPDATE-"],
-                         values["-GENREUPDATE-"], values["-TRACKRATINGUPDATE-"], values["-ALBUMIDUPDATE-"], values["-IDUPDATE-"])   
+                         values["-GENREUPDATE-"], values["-TRACKRATINGUPDATE-"], values["-COMBOUPDATE-"], values["-IDUPDATE-"])   
         window["-TABLE-"].update(values=get_tracks(connector, cursor))     
     window.close()
     main_window.un_hide()
